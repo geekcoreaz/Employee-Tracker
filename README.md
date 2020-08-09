@@ -35,6 +35,8 @@ So that I can organize and plan my business
 ## Video Example
 ![Watch the video](./assets/screen-record.gif)
 
+---
+
 ## License
 MIT License
 

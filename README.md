@@ -30,6 +30,7 @@ So that I can organize and plan my business
 
     node server.js
 ```
+---
 
 ## License
 MIT License

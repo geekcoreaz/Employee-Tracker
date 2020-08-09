@@ -12,8 +12,8 @@ const connection = mysql.createConnection({
 
     user: "root",
 
-    password: "",
-    database: "employees_db"
+    password: "rootroot",
+    database: "employee_db"
 });
 
 // Test the connection to the server.

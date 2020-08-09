@@ -227,13 +227,13 @@ function addRoles() {
 function updateRole() {
     connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
-        const employeeRows = res;
+        const employeeRow = res;
         console.table(res);
         inquirer.prompt({
             name: "employee",
             type: "list",
             message: "Please select employee to update",
-            choices: employeeRows.map(row => `${row.id} ${row.first_name} ${row.last_name}`)
+            choices: employeeRow.map(row => `${row.id} ${row.first_name} ${row.last_name}`)
         })
             .then(answers => {
                 const empId = answers.employee[0];

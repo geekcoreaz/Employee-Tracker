@@ -1,8 +1,10 @@
+// Set variables
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const table = require("console.table");
 const Employee = require("./lib/Employee");
 
+// Setup connection to MySQL server.
 const connection = mysql.createConnection({
     host: "localhost",
 
@@ -14,11 +16,13 @@ const connection = mysql.createConnection({
     database: "employees_db"
 });
 
+// Test the connection to the server.
 connection.connect(err => {
     if (err) throw err;
     console.log("You are connected as id " + connection.threadId + "\n");
     startApp();
 });
+
 
 function startApp() {
     inquirer
@@ -40,7 +44,7 @@ function startApp() {
             ]
         })
         .then(answer => {
-            //Based on the selected action, call one of our functions to query the database
+            // Call one of the functions to query the database
             switch (answer.action) {
                 case "View employees":
                     viewEmp();
@@ -72,7 +76,7 @@ function startApp() {
             }
         });
 }
-
+// Function to view the list of Employees.
 function viewEmp() {
     connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
@@ -81,8 +85,9 @@ function viewEmp() {
     });
 }
 
+// Function to view the Departments an Employee is in.
 function viewDept() {
-    console.log("Selecting all departments info...\n");
+    console.log("Selecting all departments info. \n");
     connection.query("SELECT * FROM department", (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -90,8 +95,9 @@ function viewDept() {
     });
 }
 
+// Function to view an Employee's role.
 function viewRole() {
-    console.log("Selecting roles info...\n");
+    console.log("Selecting roles info. \n");
     connection.query("SELECT * FROM role", (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -99,7 +105,7 @@ function viewRole() {
     });
 }
 
-
+// Functions to add Employee information when user is prompted to add an Employee
 function insertEmployee(connection, employee) {
     const query = connection.query(
         "INSERT INTO employee SET ?", {
@@ -110,7 +116,7 @@ function insertEmployee(connection, employee) {
     },
         (err, res) => {
             if (err) throw err;
-            console.log(res.affectedRows + " new employee inserted!\n");
+            console.log(res.affectedRows + " new employee inserted! \n");
         });
 }
 
@@ -120,6 +126,7 @@ function addEmp() {
         if (err) throw err;
         const resultedRows = res;
         console.table(res);
+        // Inquirer Prompt to ask for Employee information.
         inquirer
             .prompt([{
                 name: "name",
@@ -154,6 +161,7 @@ function addEmp() {
     });
 };
 
+// Function to add a new department to the database.
 function addDept() {
     console.log("Please enter the following information: \n");
     inquirer
@@ -174,7 +182,7 @@ function addDept() {
             viewDept();
         });
 };
-
+// Function to add a new role to the database.
 function addRoles() {
     connection.query("SELECT * FROM department", (err, res) => {
         if (err) throw err;
@@ -209,13 +217,13 @@ function addRoles() {
                 },
                     function (err, res) {
                         if (err) throw err;
-                        console.log(res.affectedRows + " new role inserted!\n");
+                        console.log(res.affectedRows + " new role inserted! \n");
                     });
                 viewRole();
             });
     });
 };
-
+// Function to update Employee roles
 function updateRole() {
     connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
@@ -230,7 +238,7 @@ function updateRole() {
             .then(answers => {
                 const empId = answers.employee[0];
                 console.log("Selected employee ID is ", empId);
-                //do the same thing we did above: select all roles, then display a list of inquirer choices
+
                 connection.query(`SELECT employee.id, employee.First_name, employee.last_name, employee.role_id, role.title FROM employee, role`, (err, res) => {
                     if (err) throw err;
                     const roleRow = res;
@@ -247,8 +255,8 @@ function updateRole() {
                                 [{ role_id: roleID }, { id: empId }],
                                 (err, res) => {
                                     if (err) throw err;
-                                    // show updated employee table
-                                    console.log(res.affectedRows + " role is updated!\n");
+
+                                    console.log(res.affectedRows + " role is updated! \n");
                                     startApp();
                                 });
                         });
